@@ -43,8 +43,20 @@ const {
 // allí la recursión
 
 var objContains = function(obj, prop, value){
- 
-}
+
+  var arreglo = Object.values(obj);
+  
+  for(let i=0; i<arreglo.length;i++){
+    comp = arreglo[i][prop] == value;
+    if(arreglo[i][prop] == value) return true;
+    else if(typeof arreglo[i] == 'object'){
+       objContains(arreglo[i],prop,value);
+      }
+  }
+  return comp;
+  }
+  
+
 
 
 // EJERCICIO 2
@@ -57,8 +69,25 @@ var objContains = function(obj, prop, value){
 // Pista: utilizar el método Array.isArray() para determinar si algun elemento de array es un array anidado
 // [Para más información del método: https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/isArray]
 
+var sumaArray = [];
 var countArray = function(array){
-  
+  if(array.length == 0) return 0;
+    for(let i=0; i<array.length;i++){
+      if(Array.isArray(array[i])){
+        for(let j=0; j<array[i].length; j++){
+          if(Array.isArray(array[i][j])){
+            countArray(array[i][j]);
+          }
+          else sumaArray.push(array[i][j]);
+        }
+      }
+      else sumaArray.push(array[i]);
+    }
+  suma = 0;
+  sumaArray.forEach(elementos=>{
+    suma+=elementos;
+  });
+  return suma
 }
 
 // ---------------------
@@ -77,8 +106,15 @@ var countArray = function(array){
 //    lista.add(3);
 //    lista.size(); --> 3
 
+count = 0;
 LinkedList.prototype.size = function(){
- 
+    if(this.head == null) return 0;
+    var current = this.head
+    while(this.head != null){
+      count++;
+      this.head = this.head.next;
+    }
+    return count;
 }
 
 
@@ -99,8 +135,24 @@ LinkedList.prototype.size = function(){
 //    sin antes tener cargada la posición 0 y 1.
 
 LinkedList.prototype.addInPos = function(pos, value){
+  var current = this.head;
+  if(pos > this.size || this.head == null) return false;
+  if(pos == 0 && this.head != null){
+    this.head.value = value;
+    this.head.next = current;
+    return true;
+  }               
+  while(current.next && pos > 1){                   
+    current = current.next;                
+    pos--;
+  }
+    var actual = current.next;
+    current.next = new Node(value);
+    current.next.next = actual;
+    return true;
   
 }
+
 
 // EJERCICIO 5
 // Implementar el método reverse dentro del prototype de LinkedList que invierta el orden de la lista
@@ -110,7 +162,21 @@ LinkedList.prototype.addInPos = function(pos, value){
 //    Lista nueva luego de aplicar el reverse: Head --> 13 --> 10 --> 4 --> 1 --> null
 
 LinkedList.prototype.reverse = function(){
- 
+  var linkedlist = new LinkedList()
+  var current = this.head;
+  var prev = null;
+  var next = null;
+  while(current){
+    next = current.next;
+    current.next = prev;
+    prev = current;
+    current = next;
+  }
+  while(prev){
+    linkedlist.add(prev);
+    prev = prev.next;
+  }
+  return linkedlist;
 }
 
 
@@ -141,8 +207,29 @@ LinkedList.prototype.reverse = function(){
 //    - mazoUserB = [6,9,10,3,6,4]
 
 var cardGame = function(mazoUserA, mazoUserB){
-
-}
+  
+    while(mazoUserA.size() > 0 && mazoUserB.size() > 0){
+      var mA = mazoUserA.dequeue();
+      var mB = mazoUserB.dequeue();
+      if(mA > mB){
+        mazoUserA.enqueue(mA);
+        mazoUserA.enqueue(mB);
+      }
+      else if(mA < mB){
+        mazoUserB.enqueue(mB);
+        mazoUserB.enqueue(mA);
+      }
+    }
+    if(mazoUserB.size() <= 0 && mazoUserA.size() > 0){
+      return "A wins!";
+    }
+    else if(mazoUserA.size() <= 0 && mazoUserB.size() > 0){
+      return "B wins!";
+    }
+    else{
+      return "Game tie!";
+    }
+  }
 
 // ---------------
 
@@ -164,7 +251,13 @@ var cardGame = function(mazoUserA, mazoUserB){
 //       5
 
 var generateBST = function(array){
- 
+  var arbol = new BinarySearchTree(array[0]);
+  for(let i=1;i<array.length;i++){
+    arbol.insert(array[i]);
+  }
+  return arbol;
+
+
 }
 
 
@@ -217,7 +310,9 @@ var selectionSort = function(array) {
 //    sumaDiez(11); --> Devolverá 21 (Ya que 11 + 10 = 21)
 
 function closureSum(numFijo) {
- 
+  return function(sumado){
+    return sumado + numFijo;
+  }
 }
 
 // -------------------
