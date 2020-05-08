@@ -277,10 +277,25 @@ var generateBST = function(array){
 //    [Donde 2 sería el número sobre el cuál queremos saber su posición en el array]
 
 
-var binarySearch = function (array, target) {
 
-  
-}
+var binarySearch = function (array, target) {
+  var ini = 0;
+  var final = array.length - 1 ;
+  while(ini <= final){
+    var medio = Math.floor((ini + final)/2);
+    if(array[medio] < target){
+      ini = medio + 1;
+    }
+    else if(array[medio] > target){
+      final = medio -1;
+    }
+    else{
+      return medio;
+    }
+  }
+  return -1
+ 
+ }
 
 // EJERCICIO 9
 // Ordená un arreglo de números usando selection sort. El nuevo arreglo debe ser devuelto.
@@ -292,7 +307,21 @@ var binarySearch = function (array, target) {
 
 
 var selectionSort = function(array) {
-  
+
+  for(i=0; i<array.length - 1;i++){
+    var min = i;
+    for(let j=i+1; j<array.length;j++){
+      if(array[j] < array[min]){
+        min = j;
+      }
+    }
+    if(min != i){
+      var arregloMinimo = array[min];
+      array[min] = array[i];
+      array[i] = arregloMinimo;
+    }
+  }
+  return array;
 }
 
 // ----- Closures -----
@@ -328,7 +357,7 @@ function closureSum(numFijo) {
 //    console.log(anagrams); // [ 'abc', 'acb', 'bac', 'bca', 'cab', 'cba' ]
 
 var allAnagrams = function(string, array, index) {
- 
+
 };
 
 module.exports = {
